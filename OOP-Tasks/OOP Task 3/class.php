@@ -94,45 +94,26 @@ class CollatzCalculator {
     }
 }
 
-class CollatzCalculatorChild extends CollatzCalculator {  //We define a "Collatz Calculator Child".
+class CollatzCalculatorChild extends CollatzCalculator {  
 
-//The child inherits properties and methods from our "CollatzCalculator".
 
-    private $histogram;    //histogram is a private property.
 
-    //We use this "$histogram" to fill the data that we calculate for histogram.
+    private $histogram;    
 
-    public function histCalc($interval) {   //This is public function that takes "interval" as a paramater. [n;m] (range for our Collatz sequence)
     
-        $max = 0;       //This "max" variable is to find maximum iteration number. (The iteration number that we are able to see for all of the numbers)
-        //Knowing this information helps us to declare a range for our histogram. It means that max is gonna be the last value of our histogram.
 
-        $histInfo = array();    //We will store the frequency of iteration counts in this array.
+    public function histCalc($interval) {   
+    
+        $max = 0;       
+        $histInfo = array();    
 
         for ($i = $interval[0]; $i <= $interval[1]; $i++) {     
 
-            /* $interval[0] is to initialize the first value of our range,
-            so it compares the first one with the second one... Until it reaches
-            to last value of our range.
-            */
-
             $result = $this->calculateCollatz($i); 
             $max = max($max, $result['max']);
-
-            /*
-            We call the calculate Collatz method for the number $i we have and 
-            calculate the Collatz sequence for this value. 
-            We iterate this with each number $i, until the end value. 
-            
-            With $result, we store the Collatz sequence information calculated for the number "$i".
-            */
     
             
             $iterationCount = $result['iterations'];
-            /*
-            We get the number of iterations of the Collatz sequence
-            needed to reach 1. This information is stored in the "$iterationCount".
-            */
 
             if (isset($histInfo[$iterationCount])) {
                 $histInfo[$iterationCount]++;
@@ -140,58 +121,33 @@ class CollatzCalculatorChild extends CollatzCalculator {  //We define a "Collatz
                 $histInfo[$iterationCount] = 1;
             }
 
-            /*
-            For the if-else part;
-            if the iteration number is already in $histInfo array, so it means that this itertion 
-            number was encountered before, so frequency count is increased by 1 for that number. However,
-            it is not included in our array, number of iterations is assigned as value 1,
-            and it represents starting frequency count.
-            */
         }
 
         
         
-        ksort($histInfo);       //The ksort function sorts the iteration numbers on the x-axis in the histogram from smallest to largest.
+        ksort($histInfo);       
+        
         
         $this->histogram = array_fill(0, $max + 1, 0);
-
-        /*
-        array_fill() function is used to fill the array with zeros. Three elements of this array is;
-        firstly; first index to start -- beginning of the sequence
-        secondly; number of elements to fill -- iteration number can start from 0
-        untill the maximum value that we mentioned above ($max). So it is shown as 
-        $max + 1. It is important to have all iterations.
-        thirdly; value to fill the array -- it is set to 0, we start to fill frequencies with "0".
-        */
     
        
-        $this->histogram = $histInfo; //The $histInfo array is assigned to the "$this->histogram" property as an array containing the frequencies of the calculated iteration numbers. 
-                                        //So this creates the array that represents the histogram.
+        $this->histogram = $histInfo;  
+                                      
     
-        return $this->histogram;        //returning the histogram array
-    }
+        return $this->histogram;            }
     
     public function showHist($start, $end) {
         $interval = [$start, $end];
         $histogram = $this->histCalc($interval);
-
-        /*
-        We use $start and $end parameters for our range again. In this method,
-        we make $interval array to include these parameters. So when histogram
-        calculation ($histCalc) method is called with $interval, we are able to calculate
-        information in histogram (for specified range). $histogram stores this information.
-        */
     
-        $maxCount = max($histogram); //maximum frequency count; it is necessary to normalize the height of columns
-
-       
+        $maxCount = max($histogram);        
         
         ?>
 
         <div class="histogram-container">
             <?php
             foreach ($histogram as $iteration => $frequency) {
-                $barHeight = ($frequency / $maxCount) * 100; // calculating the height of the bars
+                $barHeight = ($frequency / $maxCount) * 100; 
                 ?>
                 <div class="bar" style="height: 
                 <?php 
